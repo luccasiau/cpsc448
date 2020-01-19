@@ -1,9 +1,11 @@
 import pandas as pd
 
 class Graph:
-    def __init__():
+    def __init__(self):
         self.N = 0
-        self.adj_ = {}
+        self.adj = {}
+        self.dist = {}
+        self.landmarks = set()
         pass
 
     def build_from_csv(self, file_path):
@@ -16,7 +18,16 @@ class Graph:
     def add_edge(self, u, v, w):
         self.N = max(self.N, u, v)
 
-        if u not in self.adj_:
-            self.adj_[u] = []
-        self.adj_[u].append((v, w))
+        if u not in self.adj:
+            self.adj[u] = []
+        self.adj[u].append((v, w))
 
+    def get_neighbours(self, u):
+        if u not in self.adj:
+            return []
+        return self.adj[u]
+
+    def get_dist(self, u, v):
+        if u not in self.dist: return float('inf')
+        if v not in self.dist[u]: return float('inf')
+        return self.dist[u][v]
