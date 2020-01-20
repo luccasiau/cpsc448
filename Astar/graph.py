@@ -54,6 +54,7 @@ class Graph:
         return ref[u][v] - pi[u] + pi[v]
 
     # Returns a list of pairs (v, w) representing an edge (u, v) with cost w
+    # TODO: I should make this return just u and refactor some things.
     def get_neighbours(self, u, rev=False):
         ref = self.edge
         if rev is True: ref = self.rev_edge
@@ -81,3 +82,8 @@ class Graph:
             self.landmarks = landmarks.find_random_landmarks(self, k)
         else:
             print('Method', method, 'not regonized.')
+        
+        # Calculate dijkstra (in both ways) from lower-bounds
+        for l in self.landmarks:
+            dijkstra(g, l)
+            dijkstra(g, l, rev=True)

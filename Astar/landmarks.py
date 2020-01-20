@@ -1,5 +1,5 @@
 import random
-from dijkstra import dijkstra
+from shortest_paths import dijkstra
 
 # Graph is input graph, k is the number of landmarks to be defined.
 # This is using farthest landmark selection algorithm.

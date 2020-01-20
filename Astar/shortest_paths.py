@@ -1,4 +1,5 @@
 from heapq import *
+from lower_bound import get_average_potential_functions
 
 def dijkstra(graph, source, rev=False):
     memo_idx = (source+1) * (-1 if rev else 1)
@@ -22,3 +23,10 @@ def dijkstra(graph, source, rev=False):
         else: graph.set_dist(source, v, dist[v])
 
     graph.dijkstra_memo.add(memo_idx)
+
+# For now: this REQUIRES all the landmarks to have been set.
+def bidirectional_a_star(graph, source, dest):
+    pi_s, pi_t = get_average_potential_functions(graph, source, dest)
+    # TODO: Consider making potential functions an input.
+    # TODO: Finish
+    pass
