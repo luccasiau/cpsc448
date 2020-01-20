@@ -34,7 +34,6 @@ def find_farthest_landmarks(graph, k=4, initial=-1):
                 cur_choice, max_dist = v, cur_dist
 
         dijkstra(graph, cur_choice)
-        print('Adding', cur_choice)
         land.add(cur_choice)
 
     return land
