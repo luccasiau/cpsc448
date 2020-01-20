@@ -1,4 +1,5 @@
 import pandas as pd
+import landmarks
 
 """
 Main class for Graph structure in this demo.
@@ -17,7 +18,7 @@ class Graph:
         self.rev_edge = {}
         self.dist = {}
         self.landmarks = set()
-        pass
+        self.dijkstra_memo = set()  # TODO: Document this memo
 
     # TODO: Add documentation about file format
     def build_from_csv(self, file_path):
@@ -25,10 +26,15 @@ class Graph:
         graph_df = pd.read_csv(file_path)
 
         for index, row in graph_df.iterrows():
-            self.add_edge(row['START_NODE'], row['END_NODE'], row['LENGTH'])
+            self.add_edge(
+                row['START_NODE']-1,
+                row['END_NODE']-1,
+                row['LENGTH'])
 
     def add_edge(self, u, v, w):
-        self.N = max(self.N, u, v)
+        self.dijkstra_memo = set()
+
+        self.N = int(max(self.N, u+1, v+1))
 
         if u not in self.edge:
             self.edge[u] = {}
@@ -67,3 +73,11 @@ class Graph:
         if u not in self.dist:
             self.dist[u] = {}
         self.dist[u][v] = d
+
+    def select_landmarks(self, k=4, method='FARTHEST'):
+        if method == 'FARTHEST':
+            self.landmarks = landmarks.find_farthest_landmarks(self, k, 0)
+        elif method == 'RANDOM':
+            self.landmarks = landmarks.find_random_landmarks(self, k)
+        else:
+            print('Method', method, 'not regonized.')
