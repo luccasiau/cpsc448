@@ -25,8 +25,55 @@ def dijkstra(graph, source, rev=False):
     graph.dijkstra_memo.add(memo_idx)
 
 # For now: this REQUIRES all the landmarks to have been set.
-def bidirectional_a_star(graph, source, dest):
-    pi_s, pi_t = get_average_potential_functions(graph, source, dest)
-    # TODO: Consider making potential functions an input.
-    # TODO: Finish
-    pass
+# Returns the sortest distance from source to dest.
+def bidirectional_a_star(graph, source, dest, pi_s=None, pi_t=None):
+    if pi_s == None and pi_t == None:
+        pi_s, pi_t = get_average_potential_functions(graph, source, dest)
+    
+    forward_dist = {source: 0}
+    reverse_dist = {dest: 0}
+    forward_pq = [(0, source)]
+    reverse_pq = [(0, dest)]
+    forward_seen = set()
+    reverse_seen = set()
+    shortest_so_far = float('inf')
+
+    while forward_pq or reverse_pq:
+        cur_forward = -1
+        while forward_pq:
+            (_, cur_forward) = heappop(forward_pq)
+            if cur_forward not in forward_seen: break 
+
+        if cur_forward != -1:
+            if cur_forward in reverse_seen: break
+            forward_seen.add(cur_forward)
+            for (v, w) in graph.get_neighbours(cur_forward):
+                if v in reverse_seen or v == dest:
+                    shortest_so_far = min(shortest_so_far,\
+                        forward_dist[cur_forward] + w + reverse_dist[v])
+
+                if (v not in forward_dist) or\
+                    (forward_dist[v] > w + forward_dist[cur_forward]):
+                    forward_dist[v] = w + forward_dist[cur_forward]
+                    heappush(forward_pq, (forward_dist[v] + pi_t[v], v))
+
+        cur_reverse = -1
+        while reverse_pq:
+            (_, cur_reverse) = heappop(reverse_pq)
+            if cur_reverse not in reverse_seen: break
+        
+        if cur_reverse != -1:
+            if cur_reverse in forward_seen: break
+            reverse_seen.add(cur_reverse)
+
+            for (v, w) in graph.get_neighbours(cur_reverse, rev=True):
+                if v in forward_seen or v == source:
+                    shortest_so_far = min(shortest_so_far,\
+                        reverse_dist[cur_reverse] + w + forward_dist[v])
+ 
+                if (v not in reverse_dist) or\
+                    (reverse_dist[v] > w + reverse_dist[cur_reverse]):
+                    reverse_dist[v] = w + reverse_dist[cur_reverse]
+                    heappush(reverse_pq, (reverse_dist[v] + pi_s[v], v))
+
+    return shortest_so_far

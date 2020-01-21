@@ -13,6 +13,7 @@ def get_lower_bound(graph, s):
             pi[v] = max(pi[v], graph.get_dist(v, l) - graph.get_dist(s, l))
             pi[v] = max(pi[v], graph.get_dist(l, s) - graph.get_dist(l, v))
 
+    pi[s] = 0
     np.nan_to_num(pi, nan=float('inf'))
     return pi
 
@@ -22,4 +23,4 @@ def get_average_potential_functions(graph, s, t):
     pi_t = get_lower_bound(graph, t)
 
     p_s = (pi_s - pi_t)/2.0
-    return p_s, -p_t
+    return p_s, -p_s

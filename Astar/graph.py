@@ -1,5 +1,6 @@
 import pandas as pd
 import landmarks
+from shortest_paths import dijkstra
 
 """
 Main class for Graph structure in this demo.
@@ -33,11 +34,15 @@ class Graph:
 
     def add_edge(self, u, v, w):
         self.dijkstra_memo = set()
+        u = int(u)
+        v = int(v)
 
         self.N = int(max(self.N, u+1, v+1))
 
         if u not in self.edge:
             self.edge[u] = {}
+        if v in self.edge[u]:
+            w = min(w, self.edge[u][v])
         self.edge[u][v] = w
 
         if v not in self.rev_edge:
@@ -85,5 +90,5 @@ class Graph:
         
         # Calculate dijkstra (in both ways) from lower-bounds
         for l in self.landmarks:
-            dijkstra(g, l)
-            dijkstra(g, l, rev=True)
+            dijkstra(self, l)
+            dijkstra(self, l, rev=True)
