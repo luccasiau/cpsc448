@@ -37,17 +37,14 @@ def bidirectional_a_star(graph, source, dest, pi_s=None, pi_t=None):
     if pi_s == None and pi_t == None:
         pi_s, pi_t = get_average_potential_functions(graph, source, dest)
 
-    # Initializing variables for both algorithms
-    forward_dist = {source: 0}
-    reverse_dist = {dest: 0}
-    forward_pq = [(0, source)]
-    reverse_pq = [(0, dest)]
-    forward_seen = set()
-    reverse_seen = set()
+    # Initializing variables for both directions
+    forward_dist, reverse_dist = {source: 0}, {dest: 0}
+    forward_pq, reverse_pq = [(0, source)], [(0, dest)]
+    forward_seen, reverse_seen = set(), set()
     shortest_so_far = float('inf')
 
     while forward_pq or reverse_pq:
-        # Forward search step
+        # Start forward search step
         cur_forward = -1
         while forward_pq:
             (_, cur_forward) = heappop(forward_pq)
@@ -68,7 +65,7 @@ def bidirectional_a_star(graph, source, dest, pi_s=None, pi_t=None):
                     forward_dist[v] = w + forward_dist[cur_forward]
                     heappush(forward_pq, (forward_dist[v] + pi_t[v], v))
 
-        # Reverse search step
+        # Start reverse search step
         cur_reverse = -1
         while reverse_pq:
             (_, cur_reverse) = heappop(reverse_pq)
