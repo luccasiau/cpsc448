@@ -84,6 +84,7 @@ class Graph:
         if method == 'FARTHEST':
             self.landmarks = landmarks.find_farthest_landmarks(self, k, 0)
         elif method == 'RANDOM':
+            # TODO: Investigate possible bug in random selection.
             self.landmarks = landmarks.find_random_landmarks(self, k)
         else:
             print('Method', method, 'not regonized.')

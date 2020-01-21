@@ -1,9 +1,10 @@
 from heapq import *
 from lower_bound import get_average_potential_functions
 
-def dijkstra(graph, source, rev=False):
+# If given a specific destination, Dijsktra will stop as soon as it is scanned.
+def dijkstra(graph, source, dest=None, rev=False, skip_memo=False):
     memo_idx = (source+1) * (-1 if rev else 1)
-    if memo_idx in graph.dijkstra_memo:
+    if skip_memo == False and memo_idx in graph.dijkstra_memo:
         return
 
     dist = {source: 0}
@@ -12,6 +13,9 @@ def dijkstra(graph, source, rev=False):
         (cost, cur) = heappop(q)
         if dist[cur] < cost:
             continue
+
+        if cur == dest:
+            break
 
         for (v, w) in graph.get_neighbours(cur, rev):
             if (v not in dist) or (dist[v] > w + dist[cur]):
@@ -22,10 +26,13 @@ def dijkstra(graph, source, rev=False):
         if rev: graph.set_dist(v, source, dist[v])
         else: graph.set_dist(source, v, dist[v])
 
-    graph.dijkstra_memo.add(memo_idx)
+    if dest is not None:
+        print('Vertices scanned by Dijkstra:', len(dist))
+    if dest is None:
+        graph.dijkstra_memo.add(memo_idx)
 
 # For now: this REQUIRES all the landmarks to have been set.
-# Returns the sortest distance from source to dest.
+# Returns the shortest distance from source to dest.
 def bidirectional_a_star(graph, source, dest, pi_s=None, pi_t=None):
     if pi_s == None and pi_t == None:
         pi_s, pi_t = get_average_potential_functions(graph, source, dest)
@@ -76,4 +83,5 @@ def bidirectional_a_star(graph, source, dest, pi_s=None, pi_t=None):
                     reverse_dist[v] = w + reverse_dist[cur_reverse]
                     heappush(reverse_pq, (reverse_dist[v] + pi_s[v], v))
 
+    print('Vertices scanned by bidirectional A*:', len(reverse_seen) + len(forward_seen))
     return shortest_so_far
