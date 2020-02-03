@@ -16,6 +16,10 @@ class HuffmanTree:
         self.code_to_char_map = {}
         self.buildTree()
 
+    # Ok, this isn't actually a tree [yet], unfortunately. To take this to the
+    # next level, one would build a Trie out of the result of this function.
+    # This would be decoding faster. For a file with 128 different characters,
+    # I assume it would be ~8x faster to have Trie decoding it.
     def buildTree(self):
         # These will substitute all the temporary variables that hold strings
         tmp_map = {}
@@ -55,3 +59,11 @@ class HuffmanTree:
             self.char_to_code_map[chr(i)] = tmp_map[chr(i)]
             self.code_to_char_map[tmp_map[chr(i)]] = chr(i)
 
+    def getCode(self, c):
+        return self.char_to_code_map[c]
+
+    def isDecodable(self, c):
+        return True if c in self.code_to_char_map else False
+
+    def getChar(self, code):
+        return self.code_to_char_map[code]

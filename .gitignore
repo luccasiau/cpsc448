@@ -1,3 +1,5 @@
 # Byte-compiled / optimized / DLL files
 __pycache__/
 *.py[cod]
+data_compression/paradise_lost.txt
+data_compression/test.txt
