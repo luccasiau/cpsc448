@@ -7,6 +7,8 @@ Argument input:
     - (optional): The encoded string. If this is not provided, the user
     will be prompted to provide one afterwards.
         -> The character # must be used to represent the end-of-string char.
+
+Written by Lucca Siaudzionis on 2020/01/30.
 """
 
 import sys
