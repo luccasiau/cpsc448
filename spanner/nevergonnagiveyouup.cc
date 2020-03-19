@@ -47,12 +47,12 @@ void drawEdges(SpannerGraph& graph, bitset<BMASK_LIMIT> bmask) {
 
     ld curD = graph.getPointsDistance(a, b);
     if (curD > biggest + epsilon) {
-      segBiggest = biggest;
+      secBiggest = biggest;
       secPair = bigPair;
       biggest = curD;
       bigPair = {a, b};
     } else if (curD > secBiggest + epsilon) {
-      segBiggest = curD;
+      secBiggest = curD;
       secPair = {a, b};
     }
   }
